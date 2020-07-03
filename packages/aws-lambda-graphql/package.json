@@ -1,14 +1,14 @@
 {
-  "name": "aws-lambda-graphql",
-  "version": "1.0.0-alpha.7",
+  "name": "@jksaunders/aws-lambda-graphql",
+  "version": "1.0.0-alpha.8",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "bugs": {
-    "url": "https://github.com/michalkvasnicak/aws-lambda-graphql/issues"
+    "url": "https://github.com/jksaunders/aws-lambda-graphql/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/michalkvasnicak/aws-lambda-graphql"
+    "url": "https://github.com/jksaunders/aws-lambda-graphql"
   },
   "sideEffects": false,
   "keywords": [
@@ -29,7 +29,7 @@
     "README.md",
     "LICENSE"
   ],
-  "description": "Apollo server for AWS Lambda with WebSocket subscriptions support over API Gateway v1 + v2)",
+  "description": "Fork of https://github.com/michalkvasnicak/aws-lambda-graphql",
   "dependencies": {
     "@types/aws-lambda": "^8.10.36",
     "@types/ioredis": "^4.16.6",
@@ -53,7 +53,9 @@
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.6",
     "mock-socket": "^8.0.5",
+    "rimraf": "^3.0.2",
     "subscriptions-transport-ws": "^0.9.16",
+    "typescript": "^3.9.6",
     "wait-for-expect": "1.1.0"
   },
   "scripts": {
