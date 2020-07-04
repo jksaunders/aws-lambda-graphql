@@ -405,13 +405,13 @@ export class Server<
               };
             }
 
-            if (isGQLStopOperation(operation)) {
+            const endOperation = async (operationId: string) => {
               // unsubscribe client
               if (onOperationComplete) {
-                onOperationComplete(connection, operation.id);
+                onOperationComplete(connection, operationId);
               }
               const response = formatMessage({
-                id: operation.id,
+                id: operationId,
                 type: SERVER_EVENT_TYPES.GQL_COMPLETE,
               });
 
@@ -422,8 +422,14 @@ export class Server<
 
               await this.subscriptionManager.unsubscribeOperation(
                 connection.id,
-                operation.id,
+                operationId,
               );
+
+              return response;
+            };
+
+            if (isGQLStopOperation(operation)) {
+              const response = await endOperation(operation.id);
 
               return {
                 body: response,
@@ -479,6 +485,11 @@ export class Server<
                 connection,
                 response,
               );
+
+              await endOperation(
+                (operation as IdentifiedOperationRequest).operationId,
+              );
+
               return {
                 body: response,
                 statusCode: 200,
