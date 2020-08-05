@@ -226,6 +226,58 @@ describe('Server', () => {
           }),
         );
       });
+
+      it('passes provided Sec-WebSocket-Protocol header', async () => {
+        (connectionManager.registerConnection as jest.Mock).mockResolvedValueOnce(
+          {},
+        );
+
+        await expect(
+          handler(
+            {
+              headers: {
+                'Sec-WebSocket-Protocol': 'graphql-ws',
+              },
+              requestContext: {
+                connectionId: '1',
+                domainName: 'domain',
+                routeKey: '$connect',
+                stage: 'stage',
+              } as any,
+            } as any,
+            {} as any,
+          ),
+        ).resolves.toEqual(
+          expect.objectContaining({
+            body: '',
+            headers: {
+              'Sec-WebSocket-Protocol': 'graphql-ws',
+            },
+            statusCode: 200,
+          }),
+        );
+
+        await expect(
+          handler(
+            {
+              headers: {},
+              requestContext: {
+                connectionId: '1',
+                domainName: 'domain',
+                routeKey: '$connect',
+                stage: 'stage',
+              } as any,
+            } as any,
+            {} as any,
+          ),
+        ).resolves.toEqual(
+          expect.objectContaining({
+            body: '',
+            headers: undefined,
+            statusCode: 200,
+          }),
+        );
+      });
     });
 
     describe('disconnect phase', () => {

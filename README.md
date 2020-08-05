@@ -4,7 +4,7 @@
 <!-- markdownlint-disable -->
 [![CircleCI](https://img.shields.io/circleci/project/github/michalkvasnicak/aws-lambda-graphql/master.svg?style=flat-square)](https://circleci.com/gh/michalkvasnicak/aws-lambda-graphql)
 [![aws-lambda-graphql package version](https://img.shields.io/npm/v/aws-lambda-graphql?color=green&label=aws-lambda-graphql&style=flat-square)](https://www.npmjs.com/package/aws-lambda-graphql)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
@@ -77,11 +77,22 @@ import {
   DynamoDBSubscriptionManager,
 } from 'aws-lambda-graphql';
 
+/*
+ By default subscriptions and connections use TTL of 2 hours. 
+ This can be changed by `ttl` option in DynamoDBSubscriptionManager and DynamoDBConnectionManager.
+
+ ttl accepts a number in seconds (default is 7200 seconds) or
+ false to turn it off.
+
+ It's your responsibility to set up TTL on your connections and subscriptions tables.
+*/
 const subscriptionManager = new DynamoDBSubscriptionManager();
 const connectionManager = new DynamoDBConnectionManager({
   subscriptionManager,
 });
 ```
+
+**⚠️ in order to clean up stale connections and subscriptions please set up TTL on `ttl` field in Connections, Subscriptions and SubscriptionOperations tables. You can turn off the TTL by setting up `ttl` option to `false` in `DynamoDBSubscriptionManager` and `DynamoDBConnectionManager`.**
 
 Redis:
 
@@ -117,6 +128,14 @@ import {
   DynamoDBSubscriptionManager,
 } from 'aws-lambda-graphql';
 
+/*
+ By default event stores uses TTL of 2 hours on every event. 
+ This can be changed by `ttl` option in DynamoDBEventStore.
+ ttl accepts a number in seconds (default is 7200 seconds) or
+ false to turn it off.
+
+ It's your responsibility to set up TTL on your events table.
+*/
 const eventStore = new DynamoDBEventStore();
 const subscriptionManager = new DynamoDBSubscriptionManager();
 const connectionManager = new DynamoDBConnectionManager({
@@ -125,6 +144,8 @@ const connectionManager = new DynamoDBConnectionManager({
 ```
 
 That's it for now. Our `eventStore` will use DynamoDB to store messages that we want to broadcast to all subscribed clients.
+
+**⚠️ in order to clean up old events, please set up TTL on `ttl` field in Events store table. This can be turned off by setting up the `ttl` option to `false`.**
 
 #### 1.3 Setting up the GraphQL schema
 
@@ -511,16 +532,18 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/michalkvasnicak"><img src="https://avatars1.githubusercontent.com/u/174716?v=4" width="100px;" alt=""/><br /><sub><b>Michal Kvasničák</b></sub></a><br /><a href="#question-michalkvasnicak" title="Answering Questions">💬</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Code">💻</a> <a href="#design-michalkvasnicak" title="Design">🎨</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Documentation">📖</a> <a href="#example-michalkvasnicak" title="Examples">💡</a> <a href="#ideas-michalkvasnicak" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/pulls?q=is%3Apr+reviewed-by%3Amichalkvasnicak" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/AlpacaGoesCrazy"><img src="https://avatars1.githubusercontent.com/u/17003704?v=4" width="100px;" alt=""/><br /><sub><b>AlpacaGoesCrazy</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3AAlpacaGoesCrazy" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Documentation">📖</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://carlosguerrero.com/"><img src="https://avatars2.githubusercontent.com/u/82532?v=4" width="100px;" alt=""/><br /><sub><b>Carlos Guerrero</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=guerrerocarlos" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aguerrerocarlos" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="http://sammarks.me/"><img src="https://avatars1.githubusercontent.com/u/424093?v=4" width="100px;" alt=""/><br /><sub><b>Samuel Marks</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=sammarks" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Asammarks" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/seanchambo"><img src="https://avatars2.githubusercontent.com/u/13476523?v=4" width="100px;" alt=""/><br /><sub><b>Sean Chamberlain</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aseanchambo" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=seanchambo" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/alvinypyim"><img src="https://avatars2.githubusercontent.com/u/10244707?v=4" width="100px;" alt=""/><br /><sub><b>Alvin Yim</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aalvinypyim" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=alvinypyim" title="Code">💻</a></td>
-    <td align="center"><a href="http://www.pickpack.de"><img src="https://avatars2.githubusercontent.com/u/463984?v=4" width="100px;" alt=""/><br /><sub><b>Tobias Nentwig</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Anenti" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=nenti" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=nenti" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/michalkvasnicak"><img src="https://avatars1.githubusercontent.com/u/174716?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Michal Kvasničák</b></sub></a><br /><a href="#question-michalkvasnicak" title="Answering Questions">💬</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Code">💻</a> <a href="#design-michalkvasnicak" title="Design">🎨</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Documentation">📖</a> <a href="#example-michalkvasnicak" title="Examples">💡</a> <a href="#ideas-michalkvasnicak" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/pulls?q=is%3Apr+reviewed-by%3Amichalkvasnicak" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=michalkvasnicak" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/AlpacaGoesCrazy"><img src="https://avatars1.githubusercontent.com/u/17003704?v=4?s=100" width="100px;" alt=""/><br /><sub><b>AlpacaGoesCrazy</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3AAlpacaGoesCrazy" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Documentation">📖</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=AlpacaGoesCrazy" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://carlosguerrero.com/"><img src="https://avatars2.githubusercontent.com/u/82532?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Carlos Guerrero</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=guerrerocarlos" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aguerrerocarlos" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="http://sammarks.me/"><img src="https://avatars1.githubusercontent.com/u/424093?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Samuel Marks</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=sammarks" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Asammarks" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/seanchambo"><img src="https://avatars2.githubusercontent.com/u/13476523?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sean Chamberlain</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aseanchambo" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=seanchambo" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/alvinypyim"><img src="https://avatars2.githubusercontent.com/u/10244707?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alvin Yim</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aalvinypyim" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=alvinypyim" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.pickpack.de"><img src="https://avatars2.githubusercontent.com/u/463984?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tobias Nentwig</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Anenti" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=nenti" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=nenti" title="Tests">⚠️</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/lepilepi"><img src="https://avatars0.githubusercontent.com/u/560085?v=4" width="100px;" alt=""/><br /><sub><b>Lepi</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Alepilepi" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=lepilepi" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/lepilepi"><img src="https://avatars0.githubusercontent.com/u/560085?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lepi</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Alepilepi" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=lepilepi" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/IslamWahid"><img src="https://avatars0.githubusercontent.com/u/24783905?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Islam Salem</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3AIslamWahid" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=IslamWahid" title="Code">💻</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=IslamWahid" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/clmntrss"><img src="https://avatars0.githubusercontent.com/u/28146493?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Clement</b></sub></a><br /><a href="https://github.com/michalkvasnicak/aws-lambda-graphql/issues?q=author%3Aclmntrss" title="Bug reports">🐛</a> <a href="https://github.com/michalkvasnicak/aws-lambda-graphql/commits?author=clmntrss" title="Code">💻</a></td>
   </tr>
 </table>
 
